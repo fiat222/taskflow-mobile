@@ -51,7 +51,7 @@ class ApiClient {
   /// `GET /health/live` → `{ status, instance, version }`; `version` is the API build's commit.
   Future<String> getServerVersion() async {
     final res = await _dio.get<Map<String, dynamic>>('/health/live');
-    return res.data?['version'] as int? ?? 'unknown';
+    return res.data?['version'] as String? ?? 'unknown';
   }
 
   Future<Map<String, dynamic>> whoami() async {
