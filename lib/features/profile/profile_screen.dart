@@ -42,6 +42,10 @@ final _meProvider = FutureProvider.autoDispose<Map<String, dynamic>>((ref) {
   return ref.read(apiClientProvider).getMe();
 });
 
+final _serverVersionProvider = FutureProvider.autoDispose<String>((ref) {
+  return ref.read(apiClientProvider).getServerVersion();
+});
+
 class _Content extends ConsumerWidget {
   const _Content({required this.user});
 
@@ -166,6 +170,21 @@ class _Content extends ConsumerWidget {
           trailing: Flexible(
             child: Text(
               ProfileScreen._appVersion,
+              overflow: TextOverflow.ellipsis,
+              style: t.textTheme.bodyMedium
+                  ?.copyWith(color: t.colorScheme.onSurfaceVariant),
+            ),
+          ),
+        ),
+        SettingsTile(
+          leading: Icons.dns_outlined,
+          title: 'เวอร์ชันเซิร์ฟเวอร์',
+          trailing: Flexible(
+            child: Text(
+              ref.watch(_serverVersionProvider).maybeWhen(
+                    data: (v) => v,
+                    orElse: () => '—',
+                  ),
               overflow: TextOverflow.ellipsis,
               style: t.textTheme.bodyMedium
                   ?.copyWith(color: t.colorScheme.onSurfaceVariant),

@@ -1,3 +1,17 @@
+// The recipient is a Jenkins credential so this public repo never carries an address.
+def notifyTeam(String status) {
+    withCredentials([string(credentialsId: 'notify-email', variable: 'NOTIFY_TO')]) {
+        mail to: env.NOTIFY_TO,
+             subject: "[${status}] ${env.JOB_NAME} #${env.BUILD_NUMBER} (${env.BRANCH_NAME})",
+             body: """Pipeline: ${env.JOB_NAME}
+Branch:   ${env.BRANCH_NAME}
+Build:    #${env.BUILD_NUMBER}
+Result:   ${status}
+URL:      ${env.BUILD_URL}
+"""
+    }
+}
+
 pipeline {
     agent {
         kubernetes {
@@ -92,5 +106,10 @@ pipeline {
                 }
             }
         }
+    }
+
+    post {
+        success { notifyTeam('SUCCESS') }
+        failure { notifyTeam('FAILURE') }
     }
 }
