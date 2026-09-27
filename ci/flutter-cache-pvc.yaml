@@ -1,0 +1,10 @@
+# Keeps Gradle and pub downloads across the per-build pods; apply once with kubectl.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: flutter-cache
+spec:
+  accessModes: ['ReadWriteOnce']
+  resources:
+    requests:
+      storage: 10Gi
